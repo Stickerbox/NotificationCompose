@@ -1,4 +1,6 @@
+import com.android.build.gradle.internal.lint.AndroidLintTask
 import io.gitlab.arturbosch.detekt.detekt
+import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
     id("com.android.application")
@@ -82,9 +84,55 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
     kapt("com.google.dagger:hilt-compiler:2.39.1")
 
-    testImplementation("junit:junit:4.+")
+    testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.3")
     debugImplementation("androidx.compose.ui:ui-tooling:1.0.3")
+}
+
+tasks {
+    withType<Detekt> {
+        // Required for type resolution
+        jvmTarget = "1.8"
+    }
+
+    val lintReleaseSarifOutput = project.layout.buildDirectory.file("reports/sarif/lint-results-release.sarif")
+    afterEvaluate {
+        // Needs to be in afterEvaluate because it's not created yet otherwise
+        named<AndroidLintTask>("lintRelease") {
+            sarifReportOutputFile.set(lintReleaseSarifOutput)
+        }
+    }
+
+    val staticAnalysis by registering {
+        val detektRelease by getting(Detekt::class)
+        val androidLintRelease = named<AndroidLintTask>("lintRelease")
+
+        dependsOn(detekt, detektRelease, androidLintRelease, lintKotlin)
+    }
+
+    register<Sync>("collectSarifReports") {
+        val detektRelease by getting(Detekt::class)
+        val androidLintRelease = named<AndroidLintTask>("lintRelease")
+
+        mustRunAfter(detekt, detektRelease, androidLintRelease, lintKotlin, staticAnalysis)
+
+        from(detektRelease.sarifReportFile) {
+            rename { "detekt-release.sarif" }
+        }
+        from(detekt.get().sarifReportFile) {
+            rename { "detekt.sarif" }
+        }
+        from(lintReleaseSarifOutput) {
+            rename { "android-lint.sarif" }
+        }
+
+        into("$buildDir/reports/sarif")
+
+        doLast {
+            logger.info("Copied ${inputs.files.files.filter { it.exists() }} into ${outputs.files.files}")
+            logger.info("Output dir contents:\n${outputs.files.files.first().listFiles()?.joinToString()}")
+        }
+    }
 }

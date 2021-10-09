@@ -1,6 +1,7 @@
 package com.konradgroup.notificationcompose
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
@@ -73,7 +74,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showNotificationPreferences() {
-        startActivity(Intent(Settings.ACTION_NOTIFICATION_ASSISTANT_SETTINGS))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startActivity(Intent(Settings.ACTION_NOTIFICATION_ASSISTANT_SETTINGS))
+        }
     }
 }
 
