@@ -1,9 +1,25 @@
+import io.gitlab.arturbosch.detekt.detekt
+
 plugins {
     id("com.android.application")
     id("dagger.hilt.android.plugin")
+    id("io.gitlab.arturbosch.detekt")
+    id("org.jmailen.kotlinter")
 
     kotlin("android")
     kotlin("kapt")
+}
+
+detekt {
+    source = files("src/main/java", "src/main/kotlin")
+    config = rootProject.files("build-config/detekt.yml")
+    buildUponDefaultConfig = true
+
+    reports {
+        sarif {
+            enabled = true
+        }
+    }
 }
 
 android {
@@ -44,7 +60,7 @@ android {
     }
 
     lint {
-        lintConfig = rootProject.file("lint.xml")
+        lintConfig = rootProject.file("build-config/lint.xml")
         isWarningsAsErrors = true
         sarifReport = true
     }

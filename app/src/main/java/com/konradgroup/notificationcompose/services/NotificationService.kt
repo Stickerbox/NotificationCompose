@@ -3,9 +3,8 @@ package com.konradgroup.notificationcompose.services
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
-import com.konradgroup.notificationcompose.ext.Notification
-import com.konradgroup.notificationcompose.ext.text
 import com.konradgroup.notificationcompose.ext.toNotification
+import com.konradgroup.notificationcompose.models.Notification
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

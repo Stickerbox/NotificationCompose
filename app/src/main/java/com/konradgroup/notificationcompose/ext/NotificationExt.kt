@@ -1,14 +1,8 @@
 package com.konradgroup.notificationcompose.ext
 
-import android.app.Notification as AndroidAppNotification
 import android.service.notification.StatusBarNotification
-
-data class Notification(
-    val text: String?,
-    val title: String?,
-    val titleBig: String?,
-    val subText: String?,
-)
+import com.konradgroup.notificationcompose.models.Notification
+import android.app.Notification as AndroidAppNotification
 
 internal fun StatusBarNotification.toNotification() = Notification(
     text = text,

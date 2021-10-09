@@ -5,6 +5,7 @@ pluginManagement {
         mavenCentral()
     }
 }
+
 rootProject.name = "NotificationCompose"
 
 include(":app")

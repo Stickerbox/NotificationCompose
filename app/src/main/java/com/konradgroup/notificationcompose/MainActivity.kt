@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                         }
                             .collectAsState(initial = emptyList())
 
-                        NotificationScreen(notifications.map { it.text ?: "" } )
+                        NotificationScreen(notifications.map { it.text ?: "" })
                     }
                 }
             }
