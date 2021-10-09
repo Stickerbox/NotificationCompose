@@ -12,18 +12,6 @@ plugins {
     kotlin("kapt")
 }
 
-detekt {
-    source = files("src/main/java", "src/main/kotlin")
-    config = rootProject.files("build-config/detekt.yml")
-    buildUponDefaultConfig = true
-
-    reports {
-        sarif {
-            enabled = true
-        }
-    }
-}
-
 android {
     compileSdk = 31
 
@@ -89,6 +77,18 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.3")
     debugImplementation("androidx.compose.ui:ui-tooling:1.0.3")
+}
+
+detekt {
+    source = files("src/main/java", "src/main/kotlin")
+    config = rootProject.files("build-config/detekt.yml")
+    buildUponDefaultConfig = true
+
+    reports {
+        sarif {
+            enabled = true
+        }
+    }
 }
 
 tasks {
