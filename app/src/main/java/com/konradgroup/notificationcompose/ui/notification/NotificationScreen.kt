@@ -17,8 +17,10 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.konradgroup.notificationcompose.ui.theme.NotificationTheme
 
 @Composable
 fun NotificationScreen(
@@ -61,7 +63,7 @@ private fun NotificationsList(notifications: List<String>) {
                     .padding(horizontal = 8.dp)
                     .padding(top = 8.dp)
             ) {
-                Text(notification, Modifier.padding(8.dp))
+                Text(notification, Modifier.padding(16.dp))
             }
         }
     }
@@ -77,3 +79,19 @@ private fun TopAppBar() {
         )
     }
 }
+
+//region @Preview
+@Preview(showBackground = true)
+@Composable
+fun NotificationScreen_Preview() {
+    NotificationTheme {
+        NotificationScreen(
+            listOf(
+                "I had a dream last night",
+                "Hey what's up",
+                "Hiiii :)"
+            )
+        )
+    }
+}
+//endregion
